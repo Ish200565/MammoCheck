@@ -1,3 +1,6 @@
 Flask
 Werkzeug
-sqlite3
+Flask-Mail
+python-dotenv
+authlib
+requests
