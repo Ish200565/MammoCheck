@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard - MammoCheck{% endblock %}
+
+{%block content %}
+<div class="navbar">
+    <h1>👨‍⚕️ Doctor Dashboard</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+    <div class="doctor-panel">
+        <h2>Patient Records</h2>
+        <div class="search-bar">
+            <input type="text" id="doctorSearchInput" placeholder="Search by patient name or ID..." onkeyup="filterPatients()">
+        </div>
+
+        <div id="patientsList" class="patients-grid">
+            <!-- Dynamically populated by JavaScript -->
+        </div>
+
+        <div id="noPatientsMsg" class="no-data-msg">
+            <p>No patients found. Radiologists will add patient records.</p>
+        </div>
+    </div>
+
+    <!-- Existing Reports Section (from original doctor.html) -->
+    {% if reports %}
+    <section class="reports-section" style="margin-top: 40px;">
+        <h2>📋 Database Patient Reports</h2>
+        <div class="appointments-table-wrapper">
+            <table class="appointments-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient Name</th>
+                        <th>Density</th>
+                        <th>Diagnosis</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report[0] }}</td>
+                        <td>{{ report[1] }}</td>
+                        <td>{{ report[2] }}</td>
+                        <td>{{ report[3] }}</td>
+                        <td>{{ report[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<!-- Modal for viewing patient details -->
+<div id="patientModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePatientModal()">&times;</span>
+        <h2>Patient Details</h2>
+        
+        <div id="patientDetails" class="patient-details">
+            <!-- Dynamically populated -->
+        </div>
+
+        <div id="patientImages" class="patient-images">
+            <!-- Dynamically populated with classified images -->
+        </div>
+    </div>
+</div>
+{% endblock %}

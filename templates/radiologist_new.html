@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}Radiologist Dashboard - MammoCheck{% endblock %}
+
+{% block content %}
+<div class="navbar">
+    <h1>🔬 Radiologist Dashboard</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+    <div class="radiologist-panel">
+        <div class="form-section">
+            <h2>Add New Patient</h2>
+            <form id="patientForm" onsubmit="addPatient(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Patient Name *</label>
+                        <input type="text" id="patientName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Age *</label>
+                        <input type="number" id="patientAge" placeholder="Age" min="18" max="120" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Number *</label>
+                        <input type="tel" id="patientPhone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Patient ID *</label>
+                        <input type="text" id="patientID" placeholder="Patient ID" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Clinical History</label>
+                    <textarea id="patientNotes" placeholder="Add any relevant clinical notes..."></textarea>
+                </div>
+
+                <div class="form-section-title">
+                    <h3>Upload Mammogram Images</h3>
+                    <p class="info-text">Upload all 4 views: LCC, LMLO, RCC, RMLO</p>
+                </div>
+
+                <div class="upload-box">
+                    <div class="upload-row">
+                        <label>LCC (Left Cranio-Caudal) *</label>
+                        <input type="file" id="LCC" name="LCC" accept="image/*" required>
+                    </div>
+                    <div class="upload-row">
+                        <label>LMLO (Left Medio-Lateral Oblique) *</label>
+                        <input type="file" id="LMLO" name="LMLO" accept="image/*" required>
+                    </div>
+                    <div class="upload-row">
+                        <label>RCC (Right Cranio-Caudal) *</label>
+                        <input type="file" id="RCC" name="RCC" accept="image/*" required>
+                    </div>
+                    <div class="upload-row">
+                        <label>RMLO (Right Medio-Lateral Oblique) *</label>
+                        <input type="file" id="RMLO" name="RMLO" accept="image/*" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Patient & Classify Images</button>
+            </form>
+        </div>
+
+        <div class="patients-section">
+            <h2>Added Patients</h2>
+            <div id="radiologistPatientsList" class="patients-list">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Original Upload Section (from old radiologist.html) -->
+        {% if density %}
+        <section class="appointment-form" style="border: 2px solid #28a745; margin-top: 30px;">
+            <h2>✅ Analysis Complete</h2>
+            <div style="background-color: #d4edda; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p style="font-size: 1.2em; margin: 0; color: #155724;">
+                    <strong>Predicted Density:</strong> {{ density }}
+                </p>
+            </div>
+
+            {% if image %}
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="{{ url_for('static', filename='uploads/' + image) }}" 
+                     alt="Uploaded Mammogram" 
+                     style="max-width: 400px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            </div>
+            {% endif %}
+
+            <h3>Submit Patient Report</h3>
+            <form action="/submit_report" method="POST">
+                <input type="hidden" name="density" value="{{ density }}">
+                
+                <div class="form-group">
+                    <label for="patient_name">Patient Name *</label>
+                    <input type="text" name="patient_name" id="patient_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="diagnosis">Diagnosis *</label>
+                    <input type="text" name="diagnosis" id="diagnosis" required 
+                           placeholder="e.g., Normal, Requires follow-up">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea name="notes" id="notes" rows="4" 
+                              placeholder="Additional observations or recommendations..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit Report</button>
+            </form>
+        </section>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Processing images and classifying...</p>
+</div>
+{% endblock %}
