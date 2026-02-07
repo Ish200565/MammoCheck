@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Management - MammoCheck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 Appointment Management</h1>
+            <nav>
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+                <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary">Doctor Dashboard</a>
+                <a href="{{ url_for('radiologist_dashboard') }}" class="btn btn-secondary">Radiologist Dashboard</a>
+            </nav>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Add New Appointment Form -->
+        <section class="appointment-form">
+            <h2>Add New Appointment</h2>
+            <form action="{{ url_for('add_appointment') }}" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patient_name">Patient Name *</label>
+                        <input type="text" id="patient_name" name="patient_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patient_email">Patient Email *</label>
+                        <input type="email" id="patient_email" name="patient_email" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appointment_date">Appointment Date *</label>
+                        <input type="date" id="appointment_date" name="appointment_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment_time">Appointment Time *</label>
+                        <input type="time" id="appointment_time" name="appointment_time" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctor_name">Doctor Name *</label>
+                    <input type="text" id="doctor_name" name="doctor_name" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Appointment</button>
+            </form>
+        </section>
+
+        <!-- Appointments List -->
+        <section class="appointments-list">
+            <div class="section-header">
+                <h2>Upcoming Appointments</h2>
+                <button onclick="sendSelectedEmails()" class="btn btn-success btn-send-email" id="sendEmailBtn" disabled>
+                    📧 Send Confirmation Emails
+                </button>
+            </div>
+
+            {% if appointments %}
+            <form id="emailForm" action="{{ url_for('send_appointment_emails') }}" method="POST">
+                <div class="appointments-table-wrapper">
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll()">
+                                </th>
+                                <th>ID</th>
+                                <th>Patient Name</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Doctor</th>
+                                <th>Email Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="selected_appointments" 
+                                           value="{{ appointment[0] }}" 
+                                           class="appointment-checkbox"
+                                           onchange="updateSendButton()">
+                                </td>
+                                <td>{{ appointment[0] }}</td>
+                                <td>{{ appointment[1] }}</td>
+                                <td>{{ appointment[2] }}</td>
+                                <td>{{ appointment[3] }}</td>
+                                <td>{{ appointment[4] }}</td>
+                                <td>Dr. {{ appointment[5] }}</td>
+                                <td>
+                                    {% if appointment[7] == 1 %}
+                                        <span class="status-sent">✓ Sent</span>
+                                    {% else %}
+                                        <span class="status-pending">⏳ Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form action="{{ url_for('delete_appointment', appointment_id=appointment[0]) }}" 
+                                          method="POST" 
+                                          style="display:inline;"
+                                          onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                                        <button type="submit" class="btn btn-danger btn-small">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            {% else %}
+            <div class="no-appointments">
+                <p>No appointments scheduled yet.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Information Section -->
+        <section class="info-section">
+            <h3>📌 How to Use:</h3>
+            <ol>
+                <li><strong>Add Appointments:</strong> Fill in the form above to add new patient appointments</li>
+                <li><strong>Select Appointments:</strong> Check the boxes next to appointments you want to send emails for</li>
+                <li><strong>Send Emails:</strong> Click "Send Confirmation Emails" to send emails to 10-20 selected patients at once</li>
+                <li><strong>Track Status:</strong> Monitor which appointments have confirmation emails sent</li>
+            </ol>
+            
+            <div class="note">
+                <strong>Note:</strong> Make sure to configure your email settings in the <code>.env</code> file before sending emails.
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/appointments.js') }}"></script>
+</body>
+</html>

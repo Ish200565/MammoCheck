@@ -1,0 +1,58 @@
+/* Additional styles for user profile display */
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #667eea;
+    object-fit: cover;
+}
+
+.user-profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95em;
+}
+
+.user-profile-email {
+    font-size: 0.8em;
+    color: #7f8c8d;
+}
+
+.reports-section {
+    margin-top: 30px;
+}
+
+.reports-section h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+/* Responsive adjustments for user profile */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .user-profile {
+        width: 100%;
+        justify-content: center;
+    }
+}

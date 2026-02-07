@@ -1,13 +1,90 @@
-<h2>Doctor Dashboard</h2>
-<table border="1">
-  <tr><th>ID</th><th>Patient</th><th>Density</th><th>Diagnosis</th><th>Notes</th></tr>
-  {% for report in reports %}
-    <tr>
-      <td>{{ report[0] }}</td>
-      <td>{{ report[1] }}</td>
-      <td>{{ report[2] }}</td>
-      <td>{{ report[3] }}</td>
-      <td>{{ report[4] }}</td>
-    </tr>
-  {% endfor %}
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - MammoCheck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>👨‍⚕️ Doctor Dashboard</h1>
+                <p style="color: #7f8c8d; margin-top: 5px;">Patient Reports & Medical Data</p>
+            </div>
+            
+            <!-- User Profile Section -->
+            {% if session.get('logged_in_with_google') %}
+            <div style="display: flex; align-items: center; gap: 15px;">
+                {% if session.get('user_picture') %}
+                <img src="{{ session['user_picture'] }}" 
+                     alt="Profile" 
+                     style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #667eea;">
+                {% endif %}
+                <div>
+                    <strong style="display: block; color: #2c3e50;">{{ session.get('user_name', 'User') }}</strong>
+                    <small style="color: #7f8c8d;">{{ session.get('user_email', '') }}</small>
+                </div>
+            </div>
+            {% endif %}
+            
+            <nav>
+                <a href="{{ url_for('appointments_page') }}" class="btn btn-secondary">Appointments</a>
+                <a href="{{ url_for('radiologist_dashboard') }}" class="btn btn-secondary">Radiologist</a>
+                {% if session.get('logged_in_with_google') %}
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Home</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="reports-section">
+            <h2>📋 Patient Reports</h2>
+            
+            {% if reports %}
+            <div class="appointments-table-wrapper">
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient Name</th>
+                            <th>Density</th>
+                            <th>Diagnosis</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td>{{ report[0] }}</td>
+                            <td>{{ report[1] }}</td>
+                            <td>{{ report[2] }}</td>
+                            <td>{{ report[3] }}</td>
+                            <td>{{ report[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="no-appointments">
+                <p>No patient reports available yet.</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>
