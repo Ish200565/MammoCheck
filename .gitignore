@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore PyTorch model files
+*.pth
+
 # Distribution / packaging
 .Python
 build/

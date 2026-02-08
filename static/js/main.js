@@ -1,15 +1,55 @@
 // ==================== STATE MANAGEMENT ====================
 const STATE = {
     currentRole: null,
+    selectedRole: null,
     patients: JSON.parse(localStorage.getItem('patients')) || [],
     currentPatientIndex: null
 };
+
+// ==================== ROLE SELECTION ====================
+function setRoleSelection(role) {
+    STATE.selectedRole = role;
+    
+    // Update UI to show selection
+    document.querySelectorAll('.role-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    const selectedCard = document.querySelector(`.${role}-card`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+    }
+    
+    // Enable Google login button
+    const googleBtn = document.getElementById('googleLoginBtn');
+    if (googleBtn) {
+        googleBtn.disabled = false;
+        googleBtn.classList.add('enabled');
+    }
+    
+    // Update login note
+    const loginNote = document.querySelector('.login-note');
+    if (loginNote) {
+        loginNote.textContent = `Continue as ${role.charAt(0).toUpperCase() + role.slice(1)} with Google`;
+        loginNote.style.color = '#4285F4';
+    }
+}
+
+function loginWithGoogle() {
+    if (!STATE.selectedRole) {
+        alert('Please select your role (Doctor or Radiologist) before signing in');
+        return;
+    }
+    
+    // Redirect to Google OAuth login with selected role
+    window.location.href = `/login/google/${STATE.selectedRole}`;
+}
 
 // ==================== PAGE NAVIGATION ====================
 function selectRole(role) {
     STATE.currentRole = role;
     
-    // Send login request to server to establish session
+    // Send login request to server to establish session (backward compatibility)
     fetch('/login', {
         method: 'POST',
         headers: {

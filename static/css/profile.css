@@ -42,6 +42,9 @@
     color: #2c3e50;
     margin-bottom: 20px;
     font-size: 1.8em;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 /* Responsive adjustments for user profile */

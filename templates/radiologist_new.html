@@ -4,66 +4,76 @@
 {% block content %}
 <div class="navbar">
     <h1>🔬 Radiologist Dashboard</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <span style="color: white; font-size: 0.9em; opacity: 0.9;">⚕️ Imaging Specialist Portal</span>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
 </div>
 
 <div class="container">
     <div class="radiologist-panel">
         <div class="form-section">
-            <h2>Add New Patient</h2>
+            <h2>📋 Add New Patient Record</h2>
+            <p class="info-text" style="margin-bottom: 25px;">Complete the patient information and upload all four mammogram views for AI-assisted density analysis.</p>
+            
             <form id="patientForm" onsubmit="addPatient(event)">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Patient Name *</label>
-                        <input type="text" id="patientName" placeholder="Full Name" required>
+                        <label>👤 Patient Name *</label>
+                        <input type="text" id="patientName" placeholder="Enter full name" required>
                     </div>
                     <div class="form-group">
-                        <label>Age *</label>
-                        <input type="number" id="patientAge" placeholder="Age" min="18" max="120" required>
+                        <label>🎂 Age *</label>
+                        <input type="number" id="patientAge" placeholder="Patient age" min="18" max="120" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Contact Number *</label>
-                        <input type="tel" id="patientPhone" placeholder="Phone Number" required>
+                        <label>📞 Contact Number *</label>
+                        <input type="tel" id="patientPhone" placeholder="(XXX) XXX-XXXX" required>
                     </div>
                     <div class="form-group">
-                        <label>Patient ID *</label>
-                        <input type="text" id="patientID" placeholder="Patient ID" required>
+                        <label>🆔 Patient ID *</label>
+                        <input type="text" id="patientID" placeholder="Unique patient identifier" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Notes / Clinical History</label>
-                    <textarea id="patientNotes" placeholder="Add any relevant clinical notes..."></textarea>
+                    <label>📝 Clinical Notes / Medical History</label>
+                    <textarea id="patientNotes" placeholder="Enter relevant clinical history, symptoms, or observations..." style="min-height: 100px;"></textarea>
                 </div>
 
-                <div class="form-section-title">
-                    <h3>Upload Mammogram Images</h3>
-                    <p class="info-text">Upload all 4 views: LCC, LMLO, RCC, RMLO</p>
+                <div class="form-section-title" style="margin-top: 35px;">
+                    <h3>📸 Upload Mammogram Images</h3>
+                    <p class="info-text">
+                        <strong>Required:</strong> All 4 standard mammogram views must be uploaded<br>
+                        <small style="color: #90A4AE;">• Supported formats: JPG, PNG, DICOM • Max size: 10MB per image</small>
+                    </p>
                 </div>
 
                 <div class="upload-box">
                     <div class="upload-row">
-                        <label>LCC (Left Cranio-Caudal) *</label>
+                        <label>📷 LCC (Left Cranio-Caudal) *</label>
                         <input type="file" id="LCC" name="LCC" accept="image/*" required>
                     </div>
                     <div class="upload-row">
-                        <label>LMLO (Left Medio-Lateral Oblique) *</label>
+                        <label>📷 LMLO (Left Medio-Lateral Oblique) *</label>
                         <input type="file" id="LMLO" name="LMLO" accept="image/*" required>
                     </div>
                     <div class="upload-row">
-                        <label>RCC (Right Cranio-Caudal) *</label>
+                        <label>📷 RCC (Right Cranio-Caudal) *</label>
                         <input type="file" id="RCC" name="RCC" accept="image/*" required>
                     </div>
                     <div class="upload-row">
-                        <label>RMLO (Right Medio-Lateral Oblique) *</label>
+                        <label>📷 RMLO (Right Medio-Lateral Oblique) *</label>
                         <input type="file" id="RMLO" name="RMLO" accept="image/*" required>
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">Submit Patient & Classify Images</button>
+                <button type="submit" class="submit-btn btn-primary">
+                    🔬 Analyze Images & Add Patient Record
+                </button>
             </form>
         </div>
 

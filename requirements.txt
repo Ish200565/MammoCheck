@@ -4,3 +4,8 @@ Flask-Mail
 python-dotenv
 authlib
 requests
+torch
+torchvision
+timm
+Pillow
+numpy

@@ -4,14 +4,21 @@
 {%block content %}
 <div class="navbar">
     <h1>👨‍⚕️ Doctor Dashboard</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <span style="color: white; font-size: 0.9em; opacity: 0.9;">⚕️ Healthcare Professional Portal</span>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
 </div>
 
 <div class="container">
     <div class="doctor-panel">
-        <h2>Patient Records</h2>
+        <h2>📊 Patient Records Database</h2>
+        <p class="info-text" style="margin-bottom: 20px;">
+            View and search patient mammogram analysis results and breast density classifications
+        </p>
+        
         <div class="search-bar">
-            <input type="text" id="doctorSearchInput" placeholder="Search by patient name or ID..." onkeyup="filterPatients()">
+            <input type="text" id="doctorSearchInput" placeholder="🔍 Search by patient name, ID, or classification..." onkeyup="filterPatients()">
         </div>
 
         <div id="patientsList" class="patients-grid">
